@@ -1,0 +1,21 @@
+{
+  "name": "rencia-backend",
+  "version": "1.0.0",
+  "description": "Backend for rencia home renting app",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "rent",
+    "app",
+    "home",
+    "renting",
+    "rencia"
+  ],
+  "author": "Pazil24",
+  "license": "ISC"
+}
