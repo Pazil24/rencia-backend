@@ -1,11 +1,16 @@
 import express from 'express';
 import { getPropertyListings, getPropertyListing, addPropertyListing, updatePropertyListing, deletePropertyListing } from '../controllers/propertylistingController.js';
+import tokenValidator from '../middleware/tokenValidatorHandler.js';
+import authorizeUser from '../middleware/authorizeUserHandler.js';
 
 const router = express.Router();
 
-router.route('/').get(getPropertyListings).post(addPropertyListing);
+router.get('/', getPropertyListings);
 
-router.route('/:id').get(getPropertyListing).put(updatePropertyListing).delete(deletePropertyListing);
+router.post('/', tokenValidator, authorizeUser(['admin']), addPropertyListing);
+
+router.route('/:id').get(getPropertyListing);
+router.route('/:id', tokenValidator, authorizeUser(['admin'])).put(updatePropertyListing).delete(deletePropertyListing);
 
 
 export default router;

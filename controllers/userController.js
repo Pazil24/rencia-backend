@@ -8,8 +8,8 @@ import User from '../models/userModel.js';
 //@access Public
 
 const registerUser = asyncHandler(async (req, res) => {
-    const {username, email, password} = req.body;
-    if (!username || !email || !password) {
+    const {username, email, password, role, adminSecret} = req.body;
+    if (!username || !email || !password || !role) {
         res.status(400);
         throw new Error('All fields are required')
     }
@@ -22,14 +22,16 @@ const registerUser = asyncHandler(async (req, res) => {
     //hash password
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log('Hashed Password:',hashedPassword);
+    const userRole = role === 'admin' && adminSecret === process.env.ADMIN_SECRET ? 'admin' : 'renter'
     const user = await User.create({
         username, 
         email, 
-        password: hashedPassword
+        password: hashedPassword,
+        role: userRole
     });
     console.log(`User created: ${user}`);
     if(user) {
-        res.status(201).json({ _id: user._id, email: user.email })
+        res.status(201).json({ _id: user._id, email: user.email , role: user.role})
     }else {
         res.status(400);
         throw new Error('Invalid user data');
@@ -54,7 +56,8 @@ const userLogin = asyncHandler(async (req, res) => {
             user: {
                 id: user._id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                role: user.role
             }
         }, process.env.JWT_SECRET, { expiresIn: '30s' });
         res.status(200).json({ token });

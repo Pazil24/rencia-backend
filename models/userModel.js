@@ -17,7 +17,13 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Please provide a password'],
-}});
+        required: [true, 'Please provide a password']
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'renter'],
+        default: 'renter'
+    }
+});
 
 export default mongoose.model('User', userSchema);
