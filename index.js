@@ -1,9 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import propertylistingRoute from './routes/propertylistingRoute.js';
+import userRoute from './routes/userRoute.js';
 import errorHandler from './middleware/errorhandler.js';
+import connectDb from './config/dbConnection.js';
 
 dotenv.config();
+connectDb();
 
 const app = express();
 
@@ -14,6 +17,7 @@ app.use(express.json());
 
 //add the propertylistingRoute to the app
 app.use('/api/properties', propertylistingRoute);
+app.use('/api/users', userRoute);
 
 app.use(errorHandler);
 
