@@ -8,8 +8,8 @@ import User from '../models/userModel.js';
 //@access Public
 
 const registerUser = asyncHandler(async (req, res) => {
-    const {username, email, password, role, adminSecret} = req.body;
-    if (!username || !email || !password || !role) {
+    const {username, email, password} = req.body;
+    if (!username || !email || !password) {
         res.status(400);
         throw new Error('All fields are required')
     }
@@ -22,12 +22,11 @@ const registerUser = asyncHandler(async (req, res) => {
     //hash password
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log('Hashed Password:',hashedPassword);
-    const userRole = role === 'admin' && adminSecret === process.env.ADMIN_SECRET ? 'admin' : 'renter'
     const user = await User.create({
         username, 
         email, 
         password: hashedPassword,
-        role: userRole
+        role: 'renter'
     });
     console.log(`User created: ${user}`);
     if(user) {
@@ -41,8 +40,8 @@ const registerUser = asyncHandler(async (req, res) => {
     });
 });
 
-//@desc Current user info
-//@route POST /api/users/current
+//@desc User Login
+//@route POST /api/users/login
 //@access Private
 const userLogin = asyncHandler(async (req, res) => {
     const {email, password} = req.body;
@@ -56,10 +55,9 @@ const userLogin = asyncHandler(async (req, res) => {
             user: {
                 id: user._id,
                 username: user.username,
-                email: user.email,
-                role: user.role
+                email: user.email
             }
-        }, process.env.JWT_SECRET, { expiresIn: '30s' });
+        }, process.env.JWT_SECRET, { expiresIn: '15m' });
         res.status(200).json({ token });
     }else {
         res.status(401);
@@ -67,9 +65,9 @@ const userLogin = asyncHandler(async (req, res) => {
     }
 });
 
-//@desc Register a user
-//@route POST /api/users/register
-//@access Public
+//@desc Current user info
+//@route POST /api/users/current
+//@access Private
 const currentUser = asyncHandler(async (req, res) => {
     res.json(req.user);
 }

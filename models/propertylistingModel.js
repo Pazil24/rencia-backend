@@ -19,7 +19,24 @@ const propertyListingSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        required: true
-}});
+        required: true,
+    },
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
+}, 
+{ 
+    timestamps: { 
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }, 
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    }
+    }
+});
 
 export default mongoose.model('PropertyListing', propertyListingSchema);

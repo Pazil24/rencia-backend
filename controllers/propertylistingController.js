@@ -1,12 +1,12 @@
 import asyncHandler from 'express-async-handler';
-import PropertyListing from '../models/propertylistingModel.js'
+import PropertyListing from '../models/propertylistingModel.js';
 
 //@desc get all property listings
 //@route GET /api/properties
 //@access Public
 
 const getPropertyListings = asyncHandler(async (req, res) => {
-    const properties = await PropertyListing.find();
+    const properties = await PropertyListing.find({ user_id: req.admin.id});
     res.status(200).json(properties)
 });
 
@@ -34,7 +34,7 @@ const addPropertyListing = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('All fields are required')
     }
-    const property = await PropertyListing.create({ name, image, estateType, description, price, });
+    const property = await PropertyListing.create({ name, image, estateType, description, price, user_id: req.admin.id});
     res.status(201).json(property)
 });
 
