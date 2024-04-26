@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import propertylistingRoute from './routes/propertylistingRoute.js';
 import userRoute from './routes/userRoute.js';
 import adminRoute from './routes/adminRoute.js';
-import errorHandler from './middleware/errorhandler.js';
+import errorHandler from './middleware/errorHandler.js';
 import connectDb from './config/dbConnection.js';
 
 dotenv.config();
